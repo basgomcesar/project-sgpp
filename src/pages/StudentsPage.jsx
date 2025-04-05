@@ -1,12 +1,9 @@
-//Esta pagina se divide en 
-// Header Titulo de la pagina
-// Row de filtracion + boton de crear nuevo estudiante
-// Tabla de estudiantes + boton de consultar
-
 import FilterBar from "../components/FilterBar/FilterBar";
 import { SDivider } from "../components/Sidebar/styles";
 import StudentTable from "../components/StudentTable/StudentTable";
 import ButtonCreateStudent from "../components/ButtonCreateStudent/ButtonCreateStudent";
+import "bootstrap/dist/js/bootstrap.bundle.min"; // Importa el JS de Bootstrap
+import StudentFormModal from "../components/ButtonCreateStudent/CreateStudentModal";
 
 const StudentsPage = () => {
   return (
@@ -20,17 +17,24 @@ const StudentsPage = () => {
         <FilterBar />
         <SDivider />
         <StudentTable />
-        <div style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 1000
-        }}> 
-          <ButtonCreateStudent text="Crear nuevo estudiante" />
+        <div
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            zIndex: 1000,
+          }}
+        >
+          <ButtonCreateStudent
+            text="Crear nuevo estudiante"
+            variant="success"
+            modalTarget="studentFormModal"
+          />
+          <StudentFormModal />
         </div>
       </div>
     </div>
   );
 };
-  
-  export default StudentsPage;
+
+export default StudentsPage;
