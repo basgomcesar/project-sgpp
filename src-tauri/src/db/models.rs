@@ -28,7 +28,7 @@ pub struct InternStudent {
     pub accumulated_hours: Option<i32>,     // Nullable<Int4>
 }
 
-#[derive(Debug, Serialize, Deserialize, Insertable)]
+#[derive(AsChangeset,Debug, Serialize, Deserialize, Insertable)]
 #[diesel(table_name = intern_students)]
 pub struct NewInternStudent {
     pub control_number: String,
