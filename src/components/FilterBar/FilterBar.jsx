@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Navbar, Form, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const FilterBar = () => {
+const FilterBar = ({onFilter}) => {
     const [filtros, setFiltros] = useState({
-        nivel: 'secundaria',
+        grupo: '',
         semestre: '',
+        escuela: '',
     });
 
     const handleChange = (e) => {
@@ -19,15 +20,24 @@ const FilterBar = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Filtros aplicados:', filtros);
-        // Aquí iría la lógica para aplicar los filtros
+        if (onFilter) {
+            onFilter(filtros); 
+        }
     };
 
     const handleReset = () => {
         setFiltros({
-            nivel: 'secundaria',
+            grupo: '',
             semestre: '',
+            escuela: '',
         });
-        // Aquí iría la lógica para resetear los filtros
+        if (onFilter) {
+            onFilter({
+                grupo: '',
+                semestre: '',
+                escuela: '',
+            });
+        }
     };
 
     return (
@@ -41,14 +51,14 @@ const FilterBar = () => {
                             <Form.Group controlId="formNivel">
                                 <Form.Label>Curso</Form.Label>
                                 <Form.Select
-                                    name="Grupo"
-                                    value={filtros.nivel}
+                                    name="grupo"
+                                    value={filtros.grupo}
                                     onChange={handleChange}
                                 >
                                     <option defaultValue="">Selecciona un curso</option>
                                     <option value="cursoObs">Observación y análisis de prácticas y contextos escolares</option>
                                     <option value="cursoMediacion">Mediación pedagógica y trabajo docente</option>
-                                    <option value="cursoProyecto">PROYECTO DE INTERVENCIÓN DOCENTE</option>
+                                    <option value="cursoProyecto">Proyecto de intervención docente</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>

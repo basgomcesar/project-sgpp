@@ -1,54 +1,109 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { invoke } from '@tauri-apps/api/core';
 
-const StudentFormModal = ({ show, handleClose }) => {
+const semesterMapping = {
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+  "6": 6,
+  "7": 7,
+  "8": 8,
+  "9": 9,
+};
+
+const StudentFormModal = ({  show, handleCloseModal, onStudentCreated   }) => {
+  const [formData, setFormData] = useState({
+    nombre: "",
+    numeroControl: "",
+    semestre: "1",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleGuardar = async () => {
+    try {
+      const semesterId = semesterMapping[formData.semestre];
+      // Call the Tauri command
+      await invoke("create_student", {
+        fullNameNew: formData.nombre,
+        accumulatedHoursNew: 0,
+        controlNumberNew: formData.numeroControl,
+        semesterIdNew: semesterId,
+      });
+      alert("Estudiante creado exitosamente");
+      onStudentCreated?.();
+      handleCloseModal(); // Close the modal
+    } catch (error) {
+      console.error("Error al crear el estudiante:", error);
+      alert("Hubo un error al crear el estudiante");
+    }
+  };
+
   return (
-    <div className={`modal fade ${show ? "show" : ""}`} style={{ display: show ? "block" : "none" }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Crear Nuevo Estudiante</h5>
-            <button type="button" className="btn-close" onClick={handleClose}></button>
+    <Modal show={show} onHide={handleCloseModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Crear Nuevo Estudiante</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form>
+          <div className="mb-4">
+            <label className="form-label">Nombre completo</label>
+            <input
+              type="text"
+              className="form-control"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleInputChange}
+            />
           </div>
-          <div className="modal-body">
-            <form>
-              <div className="mb-3">
-                <label className="form-label">Nombre</label>
-                <input type="text" className="form-control" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Apellido</label>
-                <input type="text" className="form-control" />
-              </div>
-            </form>
+          <div className="mb-4">
+            <label className="form-label">Numero de control</label>
+            <input
+              type="text"
+              className="form-control"
+              name="numeroControl"
+              value={formData.numeroControl}
+              onChange={handleInputChange}
+            />
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={handleClose}>
-              Cancelar
-            </button>
-            <button type="button" className="btn btn-primary">
-              Guardar
-            </button>
+          <div className="mb-4">
+            <label className="form-label">Semestre</label>
+            <select
+              className="form-control"
+              name="semestre"
+              value={formData.semestre}
+              onChange={handleInputChange}
+            >
+              <option value="1">1er Semestre</option>
+              <option value="2">2do Semestre</option>
+              <option value="3">3er Semestre</option>
+              <option value="4">4to Semestre</option>
+              <option value="5">5to Semestre</option>
+              <option value="6">6to Semestre</option>
+              <option value="7">7mo Semestre</option>
+              <option value="8">8vo Semestre</option>
+              <option value="9">9no Semestre</option>
+            </select>
           </div>
-        </div>
-      </div>
-      {show && <div className="modal-backdrop fade show"></div>}
-    </div>
+        </form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Cancelar
+        </Button>
+        <Button variant="primary" onClick={handleGuardar}>
+          Guardar
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-const ButtonCreateStudent = ({ text, variant = "primary" }) => {
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <>
-      <Button variant={variant} onClick={() => setShowModal(true)}>
-        {text}
-      </Button>
-      <StudentFormModal show={showModal} handleClose={() => setShowModal(false)} />
-    </>
-  );
-};
-
-  export default StudentFormModal;
+export default StudentFormModal;

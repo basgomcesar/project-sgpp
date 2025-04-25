@@ -1,27 +1,37 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from "react-bootstrap";
+import StudentFormModal from "./CreateStudentModal";
 
-const ButtonCreateStudent = ({ 
-  text, 
-  onClick, 
+const ButtonCreateStudent = ({
+  text,
+  onClick,
   variant = "primary",
-  modalTarget = null
+  modalTarget = null,
+  show, // Recibe `show` desde el padre
+  onShow, // Recibe función para abrir modal
+  onClose,
 }) => {
   const handleClick = (e) => {
     if (onClick) onClick(e);
     if (modalTarget) {
-      const modal = new window.bootstrap.Modal(document.getElementById(modalTarget));
-      modal.show();
+      setShowModal(true);
     }
   };
 
   return (
-    <button 
-      className={`btn btn-${variant}`}
-      onClick={handleClick}
-    >
-      {text}
-    </button>
+    <>
+      <Button
+        variant={variant}
+        onClick={() => {
+          if (onClick) onClick();
+          if (onShow) onShow(); // Abre el modal
+        }}
+      >
+        {text}
+      </Button>
+
+      <StudentFormModal show={show} handleCloseModal={onClose} />
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
-use chrono::{NaiveDateTime};
+use chrono::NaiveDateTime;
 use serde::{Serialize, Deserialize};
-use serde_with::{serde_as};
-use diesel::{Queryable, Insertable, AsChangeset, Identifiable};
+use serde_with::serde_as;
+use diesel::{Queryable, Insertable, AsChangeset, Identifiable, Selectable};
 use crate::schema::*;
 
 // Group Teachers
@@ -54,22 +54,22 @@ pub struct NewAssignedTutor {
 }
 
 // Practices
-#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone,Selectable)]
 #[diesel(table_name = practices)]
 #[serde_as]
 pub struct Practice {
     pub id: i64,
-    pub school_id: i32,
-    pub student_id: i32,
-    pub group_teacher_id: i32,
+    pub school_id: Option<i32>,  
+    pub student_id: Option<i32>,  
+    pub group_teacher_id: Option<i32>,  
     #[serde_as(as = "Option<TimestampSeconds>")]
-    pub initial_date: Option<NaiveDateTime>,
+    pub initial_date: Option<NaiveDateTime>, 
     #[serde_as(as = "Option<TimestampSeconds>")]
-    pub final_date: Option<NaiveDateTime>,
-    pub accompanying_teacher_id: i32,
-    pub grade_and_group: String,
-    pub assigned_tutor_id: i32,
-    pub practice_hours: i32,
+    pub final_date: Option<NaiveDateTime>,  
+    pub accompanying_teacher_id: Option<i32>,  
+    pub grade_and_group: Option<String>,  
+    pub assigned_tutor_id: Option<i32>,  
+    pub practice_hours: Option<i32>,  
 }
 
 
