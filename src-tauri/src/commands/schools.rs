@@ -20,6 +20,10 @@ pub fn create_school(
     println!("🔵 Datos recibidos:");
     println!("Nombre: {}", name_new);
     println!("Dirección: {}", address_new);
+    println!("CCT: {:?}", cct_new);
+    println!("Nombre del director: {:?}", director_name_new);
+    println!("Sector: {:?}", sector_new);
+    println!("Zona: {:?}", zone_new);
 
     let new_school = NewSchool {
         cct: cct_new,

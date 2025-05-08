@@ -23,12 +23,12 @@ export default function NewSchoolPage() {
         e.preventDefault();
         try {
             const response = await invoke("create_school", { 
-                name_new: formData.schoolName,
-                address_new: formData.schoolAddress,
-                cct_new: formData.schoolCCT || null,
-                director_name_new: formData.schoolDirector || null,
-                sector_new: formData.schoolSector || null,
-                zone_new: formData.schoolZone || null,
+                nameNew: formData.schoolName,
+                addressNew: formData.schoolAddress,
+                cctNew: formData.schoolCCT || null,
+                directorNameNew: formData.schoolDirector || null,
+                sectorNew: formData.schoolSector || null,
+                zoneNew: formData.schoolZone || null,
             });
             console.log("School created successfully:", response);
             alert("Escuela creada exitosamente");
