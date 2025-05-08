@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"; // Asegúrate de importar useNav
 
 const StudentsPage = () => {
   const navigate = useNavigate();
-  const [refreshKey, setRefreshKey] = useState(0); 
+  const [refreshKey, setRefreshKey] = useState(0);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showDetailsStudent, setShowDetailsStudent] = useState(false);
   const [filters, setFilters] = useState({
@@ -73,4 +73,4 @@ const StudentsPage = () => {
   );
 };
 
-export default StudentsPage; 
+export default StudentsPage;

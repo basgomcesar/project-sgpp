@@ -7,6 +7,8 @@ export const SLayout = styled.div`
 `;
 
 export const SMain = styled.main`
+    flex: 1;
+    width: 100%;
     padding: calc(${v.smSpacing} * 2);
     h1 {
         font-size: 14px;

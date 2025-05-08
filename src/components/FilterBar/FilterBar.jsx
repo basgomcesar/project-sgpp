@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Form, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { invoke } from '@tauri-apps/api/core'; // Importa invoke para llamar a comandos de Tauri
 
-const FilterBar = ({onFilter}) => {
+const FilterBar = ({ onFilter }) => {
     const [filtros, setFiltros] = useState({
         grupo: '',
         semestre: '',
         escuela: '',
     });
+    const [escuelas, setEscuelas] = useState([]); // Estado para almacenar las escuelas
+
+    useEffect(() => {
+        // Llama al comando get_schools de Tauri al montar el componente
+        const fetchEscuelas = async () => {
+            try {
+                const result = await invoke('get_schools'); // Llama al comando
+                console.log('Escuelas obtenidas:', result); // Muestra el resultado en la consola
+                setEscuelas(result); // Actualiza el estado con las escuelas obtenidas
+            } catch (error) {
+                console.error('Error al obtener las escuelas:', error);
+            }
+        };
+
+        fetchEscuelas();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,7 +38,7 @@ const FilterBar = ({onFilter}) => {
         e.preventDefault();
         console.log('Filtros aplicados:', filtros);
         if (onFilter) {
-            onFilter(filtros); 
+            onFilter(filtros);
         }
     };
 
@@ -63,19 +80,21 @@ const FilterBar = ({onFilter}) => {
                             </Form.Group>
                         </Col>
                         <Col md={4}>
-                        <Form.Group controlId="formEscuela">
-                            <Form.Label>Escuela</Form.Label>
-                            <Form.Select
-                                name="escuela"
-                                value={filtros.escuela}
-                                onChange={handleChange}
-                            >
-                                <option defaultValue="">Selecciona una escuela</option>
-                                <option value="escuela1">Francisco Javier Clavijero</option>
-                                <option value="escuela2">Jaime Torres Bodet</option>
-                                <option value="escuela3">Adolfo Ruiz Cortines</option>
-                            </Form.Select>
-                        </Form.Group>
+                            <Form.Group controlId="formEscuela">
+                                <Form.Label>Escuela</Form.Label>
+                                <Form.Select
+                                    name="escuela"
+                                    value={filtros.escuela}
+                                    onChange={handleChange}
+                                >
+                                    <option defaultValue="">Selecciona una escuela</option>
+                                    {escuelas.map((escuela, index) => (
+                                        <option key={index} value={escuela.id}>
+                                            {escuela.school_name}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
                         </Col>
                         <Col md={4}>
                             <Form.Group controlId="formSemestre">

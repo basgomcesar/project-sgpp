@@ -4,6 +4,9 @@ import HomePage from "./pages/HomePage";
 import GroupsPage from "./pages/GroupsPage";
 import StudentsPage from "./pages/StudentsPage";
 import StudentDetailsPage from "./components/StudentPageDetails/StudentDetailsPage";
+import HighSchoolsPage from "./pages/HighSchoolsPage";
+import NewSchoolPage from "./pages/NewSchoolPage";
+import SchoolDetailsPage from "./components/SchoolDetailsPage/SchoolDetailsPage";
 
 const BrowserRouters = () => {
   return (
@@ -15,7 +18,9 @@ const BrowserRouters = () => {
         <Route path="/students/:id/edit" element={<StudentDetailsPage/>} />
         <Route path="/teachers" element={<h1>Pagina de maestros</h1>} />
         <Route path="/groups" element={<GroupsPage/>} />
-        <Route path="/highschool" element={<h1>Pagina de secundaria</h1>} />
+        <Route path="/highschool" element={<HighSchoolsPage/>} />
+        <Route path="/highschools/:id" element={<SchoolDetailsPage/>} />
+        <Route path="/highschools/new" element={<NewSchoolPage/>} />
       </Routes>
   );
 };

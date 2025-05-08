@@ -89,5 +89,35 @@ pub struct NewPractice {
     pub assigned_tutor_id: i32,
     pub practice_hours: i32,
 }
+// Schools
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = schools)]
+pub struct School {
+    pub id: i32,
+    pub cct: Option<String>,              // Nullable<Varchar>
+    pub school_name: Option<String>,     // Nullable<Varchar>
+    pub director_name: Option<String>,   // Nullable<Varchar>
+    pub address: Option<String>,         // Nullable<Varchar>
+    pub sector: Option<String>,          // Nullable<Varchar>
+    pub zone: Option<String>,            // Nullable<Varchar>
+    pub locality: Option<String>,        // Nullable<Varchar>
+    pub sector_cheif_id: Option<i32>,    // Nullable<Int4>
+    pub zone_supervisor: Option<i32>,    // Nullable<Int4>
+    pub context_id: Option<i32>,         // Nullable<Int4>
+}
 
+#[derive(Debug, Serialize, Deserialize, Insertable)]
+#[diesel(table_name = schools)]
+pub struct NewSchool {
+    pub cct: Option<String>,
+    pub school_name: Option<String>,
+    pub director_name: Option<String>,
+    pub address: Option<String>,
+    pub sector: Option<String>,
+    pub zone: Option<String>,
+    pub locality: Option<String>,
+    pub sector_cheif_id: Option<i32>,
+    pub zone_supervisor: Option<i32>,
+    pub context_id: Option<i32>,
+}
 // Incluir modelos para todas las demás tablas de manera similar...
