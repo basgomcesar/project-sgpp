@@ -120,4 +120,45 @@ pub struct NewSchool {
     pub zone_supervisor: Option<i32>,
     pub context_id: Option<i32>,
 }
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = contexts)]
+pub struct Context {
+    pub id: i32,
+    pub context_name: Option<String>,              // Nullable<Varchar>
+}
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = sector_chiefs)]
+pub struct SectorChief {
+    pub id: i32,
+    pub full_name: Option<String>, // Nullable<Varchar>
+}
+#[derive(Debug, Serialize, Deserialize, Insertable)]
+#[diesel(table_name = sector_chiefs)]
+pub struct NewSectorChief {
+    pub full_name: String,
+}
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = zone_supervisors)]
+pub struct ZoneSupervisor {
+    pub id: i32,
+    pub full_name: Option<String>, // Nullable<Varchar>
+}
+
+#[derive(Debug, Serialize, Deserialize, Insertable)]
+#[diesel(table_name = zone_supervisors)]
+pub struct NewZoneSupervisor {
+    pub full_name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Clone)]
+pub struct SchoolWithDetails {
+    pub school:School,
+    pub sector_chief:SectorChief,
+    pub zone_supervisor:ZoneSupervisor,
+    pub context:Context,
+}
+
+
 // Incluir modelos para todas las demás tablas de manera similar...
