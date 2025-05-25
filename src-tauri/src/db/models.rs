@@ -152,6 +152,20 @@ pub struct NewZoneSupervisor {
     pub full_name: String,
 }
 
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = group_teachers)]
+pub struct Teacher {
+    pub id: i32,
+    pub full_name: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = group_teachers)]
+pub struct NewTeacher {
+    pub id: i32,
+    pub full_name: Option<String>,
+}
+
 #[derive(Debug, Serialize, Deserialize, Queryable, Clone)]
 pub struct SchoolWithDetails {
     pub school:School,

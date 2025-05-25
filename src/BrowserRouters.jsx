@@ -7,6 +7,7 @@ import StudentDetailsPage from "./components/StudentPageDetails/StudentDetailsPa
 import HighSchoolsPage from "./pages/HighSchoolsPage";
 import NewSchoolPage from "./pages/NewSchoolPage";
 import SchoolDetailsPage from "./components/SchoolDetailsPage/SchoolDetailsPage";
+import TeachersPage from "./pages/TeachersPage";
 
 const BrowserRouters = () => {
   return (
@@ -16,7 +17,7 @@ const BrowserRouters = () => {
         <Route path="/students" element={<StudentsPage/>} />
         <Route path="/students/:id" element={<StudentDetailsPage/>} />
         <Route path="/students/:id/edit" element={<StudentDetailsPage/>} />
-        <Route path="/teachers" element={<h1>Pagina de maestros</h1>} />
+        <Route path="/teachers" element={<TeachersPage/>} />
         <Route path="/groups" element={<GroupsPage/>} />
         <Route path="/highschool" element={<HighSchoolsPage/>} />
         <Route path="/highschools/:id" element={<SchoolDetailsPage/>} />
