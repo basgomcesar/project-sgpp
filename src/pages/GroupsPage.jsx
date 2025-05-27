@@ -13,7 +13,7 @@ const GroupsPage = () => {
   };
   const renderSearchBar = () => (
     <div className="filter-bar">
-      <h2>Filtrar grupos</h2>
+      <h4>Filtrar grupos</h4>
       <input
         type="text"
         className="form-control mb-2"
@@ -32,7 +32,7 @@ const GroupsPage = () => {
       style={{
         position: "fixed",
         bottom: "20px",
-        left: "100px",
+        right: "20px",
         zIndex: 1000,
       }}
     >

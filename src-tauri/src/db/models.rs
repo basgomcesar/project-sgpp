@@ -3,6 +3,10 @@ use serde::{Serialize, Deserialize};
 use serde_with::serde_as;
 use diesel::{Queryable, Insertable, AsChangeset, Identifiable, Selectable};
 use crate::schema::*;
+use diesel::sql_types::{Integer, Text, Nullable, BigInt};
+use diesel::QueryableByName;
+
+
 
 // Group Teachers
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable, Identifiable, AsChangeset, Clone)]
@@ -159,10 +163,9 @@ pub struct Teacher {
     pub full_name: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[derive(Debug, Serialize, Deserialize, Queryable, Clone, Insertable, AsChangeset, Selectable)]
 #[diesel(table_name = group_teachers)]
 pub struct NewTeacher {
-    pub id: i32,
     pub full_name: Option<String>,
 }
 
@@ -174,5 +177,75 @@ pub struct SchoolWithDetails {
     pub context:Context,
 }
 
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone, Selectable)]
+#[diesel(table_name = groups)]
+pub struct Group {
+    pub id: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub course_name: Option<String>, // max_length = 500
+    pub teacher_id: Option<i32>,
+}
 
-// Incluir modelos para todas las demás tablas de manera similar...
+#[derive(Debug, Serialize, Deserialize, Insertable)]
+#[diesel(table_name = groups)]
+pub struct NewGroup {
+    pub course_name: String,
+    pub teacher_id: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct StudentInfo {
+    pub id: i32,
+    pub name: String,
+    pub control_number: String,
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GroupWithStudents {
+    pub group_id: i32,
+    pub course_name: String,
+    pub teacher_name: String,
+    pub students: Vec<StudentInfo>,
+}
+#[derive(QueryableByName, Debug, Serialize, Deserialize)]
+pub struct RawRow {
+    #[sql_type = "diesel::sql_types::Integer"]
+    pub group_id: i32,
+    #[sql_type = "diesel::sql_types::Text"]
+    pub course_name: String,
+    #[sql_type = "diesel::sql_types::Text"]
+    pub teacher_name: String,
+    #[sql_type = "diesel::sql_types::Nullable<diesel::sql_types::Integer>"]
+    pub student_id: Option<i32>,
+    #[sql_type = "diesel::sql_types::Nullable<diesel::sql_types::Text>"]
+    pub student_name: Option<String>,
+    #[sql_type = "diesel::sql_types::Nullable<diesel::sql_types::Text>"]
+    pub control_number: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, QueryableByName)]
+pub struct GroupWithDetails {
+    #[sql_type = "Integer"]
+    pub id: i32,
+
+    #[sql_type = "Text"]
+    pub course_name: String,
+
+    #[sql_type = "Integer"]
+    pub teacher_id: i32,
+
+    #[sql_type = "Text"]
+    pub teacher_name: String,
+
+    #[sql_type = "BigInt"]
+    pub student_count: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = groups)]
+pub struct GroupResult {
+    pub id: i32,
+    pub course_name: Option<String>,
+    pub teacher_id: Option<i32>,
+}
+
+

@@ -48,7 +48,7 @@ const TeachersPage = () => {
         </p>
         <SDivider />
         <div className="filter-bar">
-          <h2>Filtrar maestros</h2>
+          <h4>Filtrar maestros</h4>
           <input
             type="text"
             className="form-control mb-2"

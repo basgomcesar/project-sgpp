@@ -35,10 +35,7 @@ const TeacherFormModal = ({ show, handleCloseModal, onTeacherCreated }) => {
       const semesterId = semesterMapping[formData.semestre]; // Si no es necesario, puedes eliminar
       // Llamada al comando Tauri para crear un maestro
       await invoke("create_teacher", {
-        fullNameNew: formData.nombre,
-        employeeNumberNew: formData.numeroEmpleado,
-        departmentNew: formData.departamento,
-        semesterIdNew: semesterId, // Si no lo necesitas, elimina esta parte
+        fullName: formData.nombre,
       });
       alert("Maestro creado exitosamente");
       onTeacherCreated?.();
@@ -65,45 +62,6 @@ const TeacherFormModal = ({ show, handleCloseModal, onTeacherCreated }) => {
               value={formData.nombre}
               onChange={handleInputChange}
             />
-          </div>
-          <div className="mb-4">
-            <label className="form-label">Número de empleado</label>
-            <input
-              type="text"
-              className="form-control"
-              name="numeroEmpleado"
-              value={formData.numeroEmpleado}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="form-label">Departamento</label>
-            <input
-              type="text"
-              className="form-control"
-              name="departamento"
-              value={formData.departamento}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="form-label">Semestre</label>
-            <select
-              className="form-control"
-              name="semestre"
-              value={formData.semestre}
-              onChange={handleInputChange}
-            >
-              <option value="1">1er Semestre</option>
-              <option value="2">2do Semestre</option>
-              <option value="3">3er Semestre</option>
-              <option value="4">4to Semestre</option>
-              <option value="5">5to Semestre</option>
-              <option value="6">6to Semestre</option>
-              <option value="7">7mo Semestre</option>
-              <option value="8">8vo Semestre</option>
-              <option value="9">9no Semestre</option>
-            </select>
           </div>
         </form>
       </Modal.Body>

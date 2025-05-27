@@ -78,6 +78,7 @@ export default function HighschoolTable({ onStudentDoubleClick, filters, refresh
             onClick={() => handleRowClick(highschool.id)}
             onDoubleClick={() => handleRowDoubleClick(highschool)}
             className={selectedRow === highschool.id ? "table-active" : ""}
+            style={{ cursor: "pointer" }}
           >
             <td>{highschool.school_name}</td>
             <td>{highschool.cct}</td>
