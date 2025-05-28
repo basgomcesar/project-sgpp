@@ -1,9 +1,12 @@
 use std::fmt::format;
 
 use crate::db::connection::establish_connection;
-use crate::db::models::{School, NewSchool, Context, SchoolWithDetails, SectorChief, ZoneSupervisor};
+use crate::db::models::{School, NewSchool, Context, SchoolWithDetails, SectorChief, ZoneSupervisor,NewAssignedTutor,AssignedTutor};
+use crate::db::models::AccompanyingTeacher;
 use crate::schema::schools::dsl::{schools,id};
+use crate::schema::accompanying_teacher::dsl::accompanying_teacher;
 use crate::schema::contexts::dsl::contexts;
+use crate::schema::assigned_tutors;
 use crate::schema::{ sector_chiefs, zone_supervisors};
 use diesel::result::Error::NotFound;
 use diesel::{RunQueryDsl, QueryDsl, ExpressionMethods};
@@ -181,5 +184,46 @@ pub fn get_all_contexts() -> Result<Vec<Context>,String>{
         Err(e) => {
             Err(format!("Error de base de datos: {}", e))
         }
+    }
+}
+
+#[command]
+pub fn create_tutor(name_new: String, id_school: i32) -> Result<bool, String> {
+    use crate::schema::assigned_tutors::dsl::*;
+    
+    let conn = &mut establish_connection();
+    
+    let new_tutor = NewAssignedTutor {
+        full_name: name_new,
+        school_id: id_school,
+    };
+
+    diesel::insert_into(assigned_tutors)
+        .values(&new_tutor)
+        .execute(conn)
+        .map(|rows_affected| rows_affected > 0)
+        .map_err(|e| format!("Error de base de datos: {}", e))
+}
+
+#[command]
+pub fn get_tutors_by_school_id(id_school: i32) -> Result<Vec<AssignedTutor>, String> {
+    let conn = &mut establish_connection();
+    
+    match assigned_tutors::table
+        .filter(assigned_tutors::dsl::school_id.eq(id_school))
+        .load::<AssignedTutor>(conn) 
+    {
+        Ok(tutor_list) => Ok(tutor_list),
+        Err(e) => Err(format!("Error al obtener tutores: {}", e))
+    }
+}
+
+#[command]
+pub fn get_accompanying_teachers() -> Result<Vec<AccompanyingTeacher>, String> {
+    let conn = &mut establish_connection();
+    
+    match accompanying_teacher.load::<AccompanyingTeacher>(conn) {
+        Ok(teachers_list) => Ok(teachers_list),
+        Err(e) => Err(format!("Error de base de datos: {}", e)),
     }
 }

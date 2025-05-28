@@ -56,37 +56,47 @@ export default function HighschoolTable({ onStudentDoubleClick, filters, refresh
   };
 
   // Render condicional según estado
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (filteredHighchools.length === 0) return <div>No hay escuelas disponibles</div>;
+  if (loading) return <div className="text-center text-secondary">Cargando...</div>;
+  if (error) return <div className="text-danger text-center">{error}</div>;
 
-  // Render tabla
   return (
-    <table className="table table-striped table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Nombre</th>
-          <th scope="col">CCT</th>
-          <th scope="col">Zona</th>
-          <th scope="col">Director</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredHighchools.map((highschool) => (
-          <tr
-            key={highschool.id}
-            onClick={() => handleRowClick(highschool.id)}
-            onDoubleClick={() => handleRowDoubleClick(highschool)}
-            className={selectedRow === highschool.id ? "table-active" : ""}
-            style={{ cursor: "pointer" }}
-          >
-            <td>{highschool.school_name}</td>
-            <td>{highschool.cct}</td>
-            <td>{highschool.zone}</td>
-            <td>{highschool.director_name}</td>
+    <div className="table-responsive">
+      <table className="table table-hover table-bordered align-middle">
+        <thead className="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">CCT</th>
+            <th scope="col">Zona</th>
+            <th scope="col">Director</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {filteredHighchools.length > 0 ? (
+            filteredHighchools.map((highschool, index) => (
+              <tr
+                key={highschool.id}
+                className={selectedRow === highschool.id ? "table-primary" : ""}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(highschool.id)}
+                onDoubleClick={() => handleRowDoubleClick(highschool)}
+              >
+                <td>{index + 1}</td>
+                <td>{highschool.school_name}</td>
+                <td>{highschool.cct}</td>
+                <td>{highschool.zone}</td>
+                <td>{highschool.director_name}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="text-center text-secondary py-4">
+                No hay escuelas disponibles
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 }

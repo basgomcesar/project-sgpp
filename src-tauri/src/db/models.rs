@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 use serde_with::serde_as;
 use diesel::{Queryable, Insertable, AsChangeset, Identifiable, Selectable};
 use crate::schema::*;
-use diesel::sql_types::{Integer, Text, Nullable, BigInt};
+use diesel::sql_types::{BigInt, Integer, Nullable, Text, Timestamp};
 use diesel::QueryableByName;
 
 
@@ -46,15 +46,15 @@ pub struct NewInternStudent {
 #[diesel(table_name = assigned_tutors)]
 pub struct AssignedTutor {
     pub id: i32,
-    pub full_name: String,
-    pub school_id: i32,
+    pub full_name: Option<String>, // Nullable<Varchar>
+    pub school_id: Option<i32>, // Nullable<Int4>
 }
 
 #[derive(Debug, Serialize, Deserialize, Insertable)]
 #[diesel(table_name = assigned_tutors)]
 pub struct NewAssignedTutor {
-    pub full_name: String,
-    pub school_id: i32,
+    pub full_name: String, // Nullable<Varchar>
+    pub school_id: i32, // Nullable<Int4>
 }
 
 // Practices
@@ -76,8 +76,41 @@ pub struct Practice {
     pub practice_hours: Option<i32>,  
 }
 
+#[derive(Debug, Serialize, Deserialize, Queryable, QueryableByName)]
+pub struct PracticeWithDetails {
+    #[sql_type = "BigInt"]
+    pub id: i64,
+    #[sql_type = "Nullable<Integer>"]
+    pub school_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub school_name: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub student_id: Option<i32>,
+    #[sql_type = "Nullable<Integer>"]
+    pub group_teacher_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub group_teacher_name: Option<String>,
+    #[sql_type = "Nullable<Timestamp>"]
+    pub initial_date: Option<chrono::NaiveDateTime>,
+    #[sql_type = "Nullable<Timestamp>"]
+    pub final_date: Option<chrono::NaiveDateTime>,
+    #[sql_type = "Nullable<Integer>"]
+    pub accompanying_teacher_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub accompanying_teacher_name: Option<String>,
+    #[sql_type = "Nullable<Text>"]
+    pub grade_and_group: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub assigned_tutor_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub assigned_tutor_name: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub practice_hours: Option<i32>,
+}
 
-#[derive(Debug, Serialize, Deserialize, Queryable, Clone)]
+
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Clone, Insertable, AsChangeset, Selectable)]
 #[diesel(table_name = practices)]
 #[serde_as]
 pub struct NewPractice {
@@ -88,7 +121,7 @@ pub struct NewPractice {
     pub initial_date: Option<NaiveDateTime>,
     #[serde_as(as = "Option<TimestampSeconds>")]
     pub final_date: Option<NaiveDateTime>,
-    pub accompanying_teacher_id: i32,
+    pub accompanying_teacher_id: Option<i32>,
     pub grade_and_group: String,
     pub assigned_tutor_id: i32,
     pub practice_hours: i32,
@@ -156,7 +189,7 @@ pub struct NewZoneSupervisor {
     pub full_name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone, Selectable)]
 #[diesel(table_name = group_teachers)]
 pub struct Teacher {
     pub id: i32,
@@ -206,6 +239,14 @@ pub struct GroupWithStudents {
     pub teacher_name: String,
     pub students: Vec<StudentInfo>,
 }
+
+#[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone)]
+#[diesel(table_name = accompanying_teacher)]
+pub struct AccompanyingTeacher {
+    pub id: i32,
+    pub full_name: Option<String>, // Nullable<Varchar>
+}
+
 #[derive(QueryableByName, Debug, Serialize, Deserialize)]
 pub struct RawRow {
     #[sql_type = "diesel::sql_types::Integer"]

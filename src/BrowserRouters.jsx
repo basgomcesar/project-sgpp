@@ -10,6 +10,8 @@ import SchoolDetailsPage from "./components/SchoolDetailsPage/SchoolDetailsPage"
 import TeachersPage from "./pages/TeachersPage";
 import GroupDetails from "./pages/GroupDetails";
 import GroupCreate from "./pages/GroupCreate";
+import PracticeCreate from "./pages/PracticeCreate";
+import ZoneSupervisors from "./pages/ZoneSupervisors";
 
 const BrowserRouters = () => {
   return (
@@ -27,6 +29,8 @@ const BrowserRouters = () => {
         <Route path="/highschools/new" element={<NewSchoolPage/>} />
         <Route path="/highschools/:id/edit" element={<NewSchoolPage/>} />
         <Route path="/groups/:id" element={<GroupDetails/>} />
+        <Route path="/students/:id/add-practice" element={<PracticeCreate />} />
+        <Route path="/supervisores" element={<ZoneSupervisors/>} />
       </Routes>
   );
 };

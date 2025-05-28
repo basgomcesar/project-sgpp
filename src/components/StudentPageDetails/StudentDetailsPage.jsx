@@ -16,7 +16,7 @@ const StudentDetailsPage = () => {
     full_name: "",
     control_number: "",
     semester_id: "",
-    accumulated_hours: ""
+    accumulated_hours: "",
   });
 
   useEffect(() => {
@@ -30,12 +30,26 @@ const StudentDetailsPage = () => {
           full_name: data.full_name,
           control_number: data.control_number,
           semester_id: data.semester_id,
-          accumulated_hours: data.accumulated_hours
+          accumulated_hours: data.accumulated_hours,
         });
         const practicesData = await invoke("get_practices_by_student_id", {
           sId: parseInt(id, 10),
         });
         setPractices(practicesData);
+
+        // Sumar las horas de las prácticas al accumulated_hours del alumno
+        const totalPracticeHours = practicesData.reduce(
+          (sum, practice) => sum + (parseFloat(practice.practice_hours) || 0),
+          0
+        );
+        setStudent((prev) => ({
+          ...prev,
+          accumulated_hours: totalPracticeHours,
+        }));
+        setEditedStudent((prev) => ({
+          ...prev,
+          accumulated_hours: totalPracticeHours,
+        }));
       } catch (error) {
         console.error("Error al obtener informacion del estudiante:", error);
       } finally {
@@ -54,15 +68,15 @@ const StudentDetailsPage = () => {
       full_name: student.full_name,
       control_number: student.control_number,
       semester_id: student.semester_id,
-      accumulated_hours: student.accumulated_hours
+      accumulated_hours: student.accumulated_hours,
     });
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedStudent(prev => ({
+    setEditedStudent((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -72,18 +86,18 @@ const StudentDetailsPage = () => {
         studentId: parseInt(id, 10),
         fullNameNew: editedStudent.full_name,
         controlNumberNew: editedStudent.control_number,
-        semesterIdNew: editedStudent.semester_id,
-        accumulatedHoursNew: parseFloat(editedStudent.accumulated_hours)
+        semesterIdNew: Number(editedStudent.semester_id),
+        accumulatedHoursNew: parseFloat(editedStudent.accumulated_hours),
       });
-      
+
       setStudent({
         ...student,
         full_name: editedStudent.full_name,
         control_number: editedStudent.control_number,
         semester_id: editedStudent.semester_id,
-        accumulated_hours: editedStudent.accumulated_hours
+        accumulated_hours: editedStudent.accumulated_hours,
       });
-      
+
       setIsEditing(false);
     } catch (error) {
       console.error("Error al actualizar el estudiante:", error);
@@ -104,7 +118,7 @@ const StudentDetailsPage = () => {
           onCancelClick={handleCancelEdit}
         />
       </div>
-      
+
       <div className="row g-3" style={{ height: "calc(100vh - 150px)" }}>
         <div className="col-md-6 h-100">
           <StudentInfo
@@ -117,6 +131,15 @@ const StudentDetailsPage = () => {
 
         <div className="col-md-6 h-100">
           <PracticeHistory practices={practices} />
+
+          <div className="mt-3 text-end">
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/students/${id}/add-practice`)}
+            >
+              Agregar práctica nueva
+            </button>
+          </div>
         </div>
       </div>
     </div>

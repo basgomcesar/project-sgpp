@@ -1,135 +1,128 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, Form, Button, Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { invoke } from '@tauri-apps/api/core'; // Importa invoke para llamar a comandos de Tauri
+import { useState, useEffect } from 'react';
+import { invoke } from '@tauri-apps/api/core';
 
 const FilterBar = ({ onFilter }) => {
-    const [filtros, setFiltros] = useState({
-        grupo: '',
-        semestre: '',
-        escuela: '',
-    });
-    const [escuelas, setEscuelas] = useState([]); // Estado para almacenar las escuelas
+  const [filtros, setFiltros] = useState({
+    grupo: '',
+    semestre: '',
+    escuela: '',
+  });
+  const [escuelas, setEscuelas] = useState([]);
 
-    useEffect(() => {
-        // Llama al comando get_schools de Tauri al montar el componente
-        const fetchEscuelas = async () => {
-            try {
-                const result = await invoke('get_schools'); // Llama al comando
-                console.log('Escuelas obtenidas:', result); // Muestra el resultado en la consola
-                setEscuelas(result); // Actualiza el estado con las escuelas obtenidas
-            } catch (error) {
-                console.error('Error al obtener las escuelas:', error);
-            }
-        };
-
-        fetchEscuelas();
-    }, []);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFiltros((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+  useEffect(() => {
+    const fetchEscuelas = async () => {
+      try {
+        const result = await invoke('get_schools');
+        setEscuelas(result);
+      } catch (error) {
+        console.error('Error al obtener las escuelas:', error);
+      }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Filtros aplicados:', filtros);
-        if (onFilter) {
-            onFilter(filtros);
-        }
-    };
+    fetchEscuelas();
+  }, []);
 
-    const handleReset = () => {
-        setFiltros({
-            grupo: '',
-            semestre: '',
-            escuela: '',
-        });
-        if (onFilter) {
-            onFilter({
-                grupo: '',
-                semestre: '',
-                escuela: '',
-            });
-        }
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFiltros((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    return (
-        <Navbar bg="light" expand="lg" className="mb-4">
-            <Navbar.Brand href="#">Filtrar</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Form onSubmit={handleSubmit} className="w-100">
-                    <Row className="align-items-center">
-                        <Col md={4}>
-                            <Form.Group controlId="formNivel">
-                                <Form.Label>Curso</Form.Label>
-                                <Form.Select
-                                    name="grupo"
-                                    value={filtros.grupo}
-                                    onChange={handleChange}
-                                >
-                                    <option defaultValue="">Selecciona un curso</option>
-                                    <option value="cursoObs">Observación y análisis de prácticas y contextos escolares</option>
-                                    <option value="cursoMediacion">Mediación pedagógica y trabajo docente</option>
-                                    <option value="cursoProyecto">Proyecto de intervención docente</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                        <Col md={4}>
-                            <Form.Group controlId="formEscuela">
-                                <Form.Label>Escuela</Form.Label>
-                                <Form.Select
-                                    name="escuela"
-                                    value={filtros.escuela}
-                                    onChange={handleChange}
-                                >
-                                    <option defaultValue="">Selecciona una escuela</option>
-                                    {escuelas.map((escuela, index) => (
-                                        <option key={index} value={escuela.id}>
-                                            {escuela.school_name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                        <Col md={4}>
-                            <Form.Group controlId="formSemestre">
-                                <Form.Label>Semestre</Form.Label>
-                                <Form.Select
-                                    name="semestre"
-                                    value={filtros.semestre}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">Todos</option>
-                                    <option value="1">Primer Semestre</option>
-                                    <option value="2">Segundo Semestre</option>
-                                    <option value="3">Tercer Semestre</option>
-                                    <option value="4">Cuarto Semestre</option>
-                                    <option value="5">Quinto Semestre</option>
-                                    <option value="6">Sexto Semestre</option>
-                                    <option value="7">Septimo Semestre</option>
-                                    <option value="8">Octavo Semestre</option>
-                                    <option value="9">Noveno Semestre</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                        <Col md={4} className="d-flex align-items-end">
-                            <Button variant="primary" type="submit" className="me-2">
-                                Aplicar Filtros
-                            </Button>
-                            <Button variant="outline-secondary" onClick={handleReset}>
-                                Limpiar
-                            </Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </Navbar.Collapse>
-        </Navbar>
-    );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (onFilter) onFilter(filtros);
+  };
+
+  const handleReset = () => {
+    const reset = { grupo: '', semestre: '', escuela: '' };
+    setFiltros(reset);
+    if (onFilter) onFilter(reset);
+  };
+
+  return (
+    <div className="card mb-4 w-100">
+      <div className="card-body">
+        <form onSubmit={handleSubmit}>
+          <div className="row align-items-end g-3">
+            {/* Curso */}
+            <div className="col-md-4">
+              <label className="form-label">Curso</label>
+              <select
+                name="grupo"
+                value={filtros.grupo}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="">Selecciona un curso</option>
+                <option value="cursoObs">
+                  Observación y análisis de prácticas y contextos escolares
+                </option>
+                <option value="cursoMediacion">
+                  Mediación pedagógica y trabajo docente
+                </option>
+                <option value="cursoProyecto">
+                  Proyecto de intervención docente
+                </option>
+              </select>
+            </div>
+
+            {/* Escuela */}
+            <div className="col-md-4">
+              <label className="form-label">Escuela</label>
+              <select
+                name="escuela"
+                value={filtros.escuela}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="">Selecciona una escuela</option>
+                {escuelas.map((escuela, index) => (
+                  <option key={index} value={escuela.id}>
+                    {escuela.school_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Semestre */}
+            <div className="col-md-2">
+              <label className="form-label">Semestre</label>
+              <select
+                name="semestre"
+                value={filtros.semestre}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="">Todos</option>
+                {[...Array(9)].map((_, i) => (
+                  <option key={i} value={i + 1}>{`${i + 1}°`}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Botones */}
+            <div className="col-md-2 d-flex gap-2">
+              <button
+                type="submit"
+                className="btn btn-primary"
+              >
+                Aplicar Filtros
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="btn btn-outline-secondary"
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default FilterBar;

@@ -3,10 +3,12 @@ import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 //import { invoke } from "@tauri-apps/api/core";
 import Layout from "./components/Layout/Layout";
+
 import { GlobalStyle } from "./styles/globalStyles";
 import { darkTheme, lightTheme } from "./styles/theme";
 import BrowserRouters from "./BrowserRouters";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 
 
 export const ThemeContext = React.createContext(null);
