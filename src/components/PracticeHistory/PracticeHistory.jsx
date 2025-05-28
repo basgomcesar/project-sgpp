@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import { Trash2 } from "lucide-react"; // O usa 🗑️ como alternativa
+import { Trash2 } from "lucide-react";
 import { invoke } from "@tauri-apps/api/core";
+import { useNavigate } from "react-router-dom"; // <-- IMPORTANTE
 
 const PracticeHistory = ({ practices: initialPractices }) => {
   const [practices, setPractices] = useState(initialPractices || []);
+  const navigate = useNavigate(); // <-- HOOK para navegar
 
   const handleDelete = async (practiceId) => {
     const confirmed = window.confirm("¿Está seguro de eliminar esta práctica?");
     if (!confirmed) return;
 
     try {
-      await invoke("delete_practice", {  practiceId }); // Ajusta según backend
+      await invoke("delete_practice", { practiceId });
       setPractices((prev) => prev.filter((p) => p.id !== practiceId));
     } catch (error) {
       console.error("Error al eliminar práctica:", error);
       alert("Ocurrió un error al eliminar la práctica.");
     }
+  };
+
+  const handleRowDoubleClick = (practiceId) => {
+    navigate(`/practicedetails/${practiceId}`); // <-- Redirige a la página de detalles
   };
 
   return (
@@ -42,7 +48,11 @@ const PracticeHistory = ({ practices: initialPractices }) => {
                 </thead>
                 <tbody>
                   {practices.map((practice, index) => (
-                    <tr key={practice.id || index}>
+                    <tr
+                      key={practice.id || index}
+                      onDoubleClick={() => handleRowDoubleClick(practice.id)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <td>{index + 1}</td>
                       <td>{practice.school_name || "N/A"}</td>
                       <td>{practice.initial_date ? new Date(practice.initial_date).toLocaleDateString() : "N/A"}</td>
@@ -52,7 +62,10 @@ const PracticeHistory = ({ practices: initialPractices }) => {
                         <Trash2
                           size={18}
                           style={{ cursor: "pointer", color: "red" }}
-                          onClick={() => handleDelete(practice.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(practice.id);
+                          }}
                         />
                       </td>
                     </tr>

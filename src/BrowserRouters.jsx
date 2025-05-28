@@ -12,6 +12,7 @@ import GroupDetails from "./pages/GroupDetails";
 import GroupCreate from "./pages/GroupCreate";
 import PracticeCreate from "./pages/PracticeCreate";
 import ZoneSupervisors from "./pages/ZoneSupervisors";
+import PracticeDetails from "./pages/PracticeDetails";
 
 const BrowserRouters = () => {
   return (
@@ -31,6 +32,7 @@ const BrowserRouters = () => {
         <Route path="/groups/:id" element={<GroupDetails/>} />
         <Route path="/students/:id/add-practice" element={<PracticeCreate />} />
         <Route path="/supervisores" element={<ZoneSupervisors/>} />
+        <Route path="/practicedetails/:practiceId" element={<PracticeDetails />} />
       </Routes>
   );
 };

@@ -108,6 +108,40 @@ pub struct PracticeWithDetails {
     pub practice_hours: Option<i32>,
 }
 
+#[derive(Debug, Serialize, Deserialize, Queryable, QueryableByName)]
+pub struct PracticeWithAllDetails {
+    #[sql_type = "BigInt"]
+    pub id: i64,
+    #[sql_type = "Nullable<Integer>"]
+    pub school_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub school_name: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub student_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub student_name: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub group_teacher_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub group_teacher_name: Option<String>,
+    #[sql_type = "Nullable<Timestamp>"]
+    pub initial_date: Option<chrono::NaiveDateTime>,
+    #[sql_type = "Nullable<Timestamp>"]
+    pub final_date: Option<chrono::NaiveDateTime>,
+    #[sql_type = "Nullable<Integer>"]
+    pub accompanying_teacher_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub accompanying_teacher_name: Option<String>,
+    #[sql_type = "Nullable<Text>"]
+    pub grade_and_group: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub assigned_tutor_id: Option<i32>,
+    #[sql_type = "Nullable<Text>"]
+    pub assigned_tutor_name: Option<String>,
+    #[sql_type = "Nullable<Integer>"]
+    pub practice_hours: Option<i32>,
+}
+
 
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Clone, Insertable, AsChangeset, Selectable)]
