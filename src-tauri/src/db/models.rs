@@ -186,7 +186,7 @@ pub struct ZoneSupervisor {
 #[derive(Debug, Serialize, Deserialize, Insertable)]
 #[diesel(table_name = zone_supervisors)]
 pub struct NewZoneSupervisor {
-    pub full_name: String,
+    pub full_name: Option<String>, // Nullable<Varchar>
 }
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Identifiable, Clone, Selectable)]

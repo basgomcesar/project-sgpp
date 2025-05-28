@@ -135,3 +135,23 @@ pub fn create_group(
         .get_result::<GroupResult>(conn)
         .map_err(|e| format!("Error al crear el grupo: {}", e))
 }
+
+#[command]
+pub fn delete_group(group_id: i32) -> Result<(), String> {
+    use crate::schema::groups::dsl::*;
+    use diesel::delete;
+
+    let conn = &mut establish_connection();
+
+    // Primero, eliminamos las relaciones en groups_students
+    diesel::delete(groups_students::table.filter(groups_students::id_group.eq(group_id)))
+        .execute(conn)
+        .map_err(|e| format!("Error al eliminar estudiantes del grupo: {}", e))?;
+
+    // Luego, eliminamos el grupo
+    delete(groups.filter(id.eq(group_id)))
+        .execute(conn)
+        .map_err(|e| format!("Error al eliminar el grupo: {}", e))?;
+
+    Ok(())
+}

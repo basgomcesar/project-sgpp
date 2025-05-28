@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useNavigate } from "react-router-dom";
-import { Trash2 } from "lucide-react"; // Asegúrate de tener instalado Lucide o usa un ícono alternativo
+import { Trash2 } from "lucide-react";
 
 export default function GroupTable({
   onStudentDoubleClick,
@@ -56,15 +56,16 @@ export default function GroupTable({
     navigate(`/groups/${group.id}`);
   };
 
-  const handleDeleteStudent = async (groupId) => {
-    const confirmed = window.confirm("¿Está seguro de eliminar al estudiante?");
+  const handleDeleteGroup = async (groupId) => {
+    const confirmed = window.confirm("¿Está seguro de eliminar el grupo?");
     if (!confirmed) return;
 
     try {
-      await invoke("delete_student", { groupId }); // Ajusta el nombre del comando y parámetro según tu backend
+      await invoke("delete_group", { groupId }); // Ajusta el nombre del comando según tu backend
       setGroups((prev) => prev.filter((g) => g.id !== groupId));
     } catch (err) {
-      alert("Error al eliminar al estudiante.");
+      alert("Error al eliminar el grupo.");
+      console.error("Error al eliminar el grupo:", err);
     }
   };
 
@@ -83,7 +84,7 @@ export default function GroupTable({
             <th scope="col">ID</th>
             <th scope="col">Nombre del Grupo</th>
             <th scope="col">Profesor asignado</th>
-            <th scope="col">Numero de estudiantes</th>
+            <th scope="col">Número de estudiantes</th>
             <th scope="col">Eliminar</th>
           </tr>
         </thead>
@@ -105,7 +106,7 @@ export default function GroupTable({
                   <Trash2
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteStudent(group.id);
+                      handleDeleteGroup(group.id);
                     }}
                     style={{ cursor: "pointer", color: "red" }}
                     size={18}

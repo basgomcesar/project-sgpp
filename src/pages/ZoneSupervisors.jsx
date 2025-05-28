@@ -27,12 +27,13 @@ function ZoneSupervisors() {
         e.preventDefault();
         setError("");
         try {
-            await invoke("create_zone_supervisor", { fullName: nombreSupervisor });
+            await invoke("create_zone_supervisor", { newFullName: nombreSupervisor });
             setNombreSupervisor("");
             setShowModal(false);
             fetchSupervisors();
         } catch (e) {
             setError("Failed to create supervisor.");
+            console.error("Error creating supervisor:", e);
         }
     };
 

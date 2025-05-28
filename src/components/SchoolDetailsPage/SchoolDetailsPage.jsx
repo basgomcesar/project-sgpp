@@ -135,8 +135,6 @@ const SchoolDetailsPage = () => {
   const handleAddTutors = () => {
     // Lógica para agregar profesores tutores
     console.log("Agregar profesores tutores para la escuela:", id);
-    // Puedes navegar a otra página o mostrar un modal aquí
-    //Llamar a modal para crear nuevo tutor
     setShowModal(true);
   };
 
@@ -217,7 +215,46 @@ const SchoolDetailsPage = () => {
       )}
     </div>
   );
-  const TutorsList = () => (
+const TutorsList = () => {
+  const [editingTutorId, setEditingTutorId] = useState(null);
+  const [editedTutorName, setEditedTutorName] = useState("");
+
+  const handleDeleteTutor = async (tutorId) => {
+    const confirmed = window.confirm("¿Está seguro de eliminar este tutor?");
+    if (!confirmed) return;
+
+    try {
+      await invoke("delete_tutor", { tutorId }); // Ajusta el nombre del comando si es necesario
+      await fetchTutors();
+    } catch (error) {
+      console.error("Error al eliminar tutor:", error);
+    }
+  };
+
+  const handleEditTutor = (tutor) => {
+    setEditingTutorId(tutor.id);
+    setEditedTutorName(tutor.full_name);
+  };
+
+  const handleSaveTutorEdit = async (tutorId) => {
+    try {
+      await invoke("update_tutor", {
+        tutorId,
+        nameNew: editedTutorName,
+      });
+      setEditingTutorId(null);
+      await fetchTutors();
+    } catch (error) {
+      console.error("Error al actualizar tutor:", error);
+    }
+  };
+
+  const handleCancelEditTutor = () => {
+    setEditingTutorId(null);
+    setEditedTutorName("");
+  };
+
+  return (
     <div className="card mb-3">
       <div className="card-body">
         <h5 className="card-title">Profesores Tutores</h5>
@@ -225,11 +262,51 @@ const SchoolDetailsPage = () => {
           <p>No hay tutores registrados para esta escuela.</p>
         ) : (
           <ul className="list-group">
-            {tutors.map((tutor, index) => (
-              <li className="list-group-item" key={index}>
-                <strong>{tutor.full_name}</strong>
-                <br />
-                {tutor.email && <small>{tutor.email}</small>}
+            {tutors.map((tutor) => (
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={tutor.id}>
+                {editingTutorId === tutor.id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editedTutorName}
+                      onChange={(e) => setEditedTutorName(e.target.value)}
+                      className="form-control me-2"
+                      style={{ maxWidth: "300px" }}
+                    />
+                    <div className="btn-group">
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={() => handleSaveTutorEdit(tutor.id)}
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        onClick={handleCancelEditTutor}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span>{tutor.full_name}</span>
+                    <div className="btn-group">
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => handleEditTutor(tutor)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => handleDeleteTutor(tutor.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
@@ -237,6 +314,8 @@ const SchoolDetailsPage = () => {
       </div>
     </div>
   );
+};
+
 
   const AdditionalInfo = () => (
     <div className="card mt-3">
@@ -325,7 +404,7 @@ const SchoolDetailsPage = () => {
                 </div>
                 <div className="modal-body">
                   {/* Formulario de registro */}
-                  <form>
+                  <form onSubmit={(e) => e.preventDefault()}>
                     <div className="mb-3">
                       <label className="form-label">Nombre completo</label>
                       <input

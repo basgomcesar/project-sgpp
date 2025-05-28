@@ -1,7 +1,7 @@
 use std::fmt::format;
 
 use crate::db::connection::establish_connection;
-use crate::db::models::{School, NewSchool, Context, SchoolWithDetails, SectorChief, ZoneSupervisor,NewAssignedTutor,AssignedTutor};
+use crate::db::models::{School, NewSchool, Context, SchoolWithDetails, SectorChief, ZoneSupervisor,NewAssignedTutor,AssignedTutor,NewZoneSupervisor};
 use crate::db::models::AccompanyingTeacher;
 use crate::schema::schools::dsl::{schools,id};
 use crate::schema::accompanying_teacher::dsl::accompanying_teacher;
@@ -224,6 +224,55 @@ pub fn get_accompanying_teachers() -> Result<Vec<AccompanyingTeacher>, String> {
     
     match accompanying_teacher.load::<AccompanyingTeacher>(conn) {
         Ok(teachers_list) => Ok(teachers_list),
+        Err(e) => Err(format!("Error de base de datos: {}", e)),
+    }
+}
+
+#[command]
+pub fn delete_tutor(tutor_id: i32) -> Result<bool, String> {
+    use crate::schema::assigned_tutors::dsl::*;
+    use diesel::delete;
+
+    let conn = &mut establish_connection();
+
+    match delete(assigned_tutors.filter(id.eq(tutor_id)))
+        .execute(conn) 
+    {
+        Ok(rows_affected) => {
+            if rows_affected > 0 {
+                Ok(true)
+            } else {
+                Err(format!("No se encontró un tutor con ID {}", tutor_id))
+            }
+        },
+        Err(e) => Err(format!("Error al eliminar el tutor: {}", e)),
+    }
+}
+
+#[command]
+pub fn create_zone_supervisor(
+    new_full_name: String,
+) -> Result<bool, String> {
+    use crate::schema::zone_supervisors::dsl::*;
+    
+    let conn = &mut establish_connection();
+    
+    let new_supervisor = NewZoneSupervisor {
+        full_name: Some(new_full_name),
+    };
+    diesel::insert_into(zone_supervisors)
+        .values(&new_supervisor)
+        .execute(conn)
+        .map(|rows_affected| rows_affected > 0)
+        .map_err(|e| format!("Error de base de datos: {}", e))
+}
+
+#[command]
+pub fn get_zone_supervisors() -> Result<Vec<ZoneSupervisor>, String> {
+    let conn = &mut establish_connection();
+    
+    match zone_supervisors::table.load::<ZoneSupervisor>(conn) {
+        Ok(supervisors_list) => Ok(supervisors_list),
         Err(e) => Err(format!("Error de base de datos: {}", e)),
     }
 }
