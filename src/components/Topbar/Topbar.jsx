@@ -1,22 +1,36 @@
+import React from "react";
 import styled from "styled-components";
+import { v } from "../../styles/variables";
 
-const STopbar = styled.header`
-    width: 100%;
-    background-color: #1976d2;
-    color: #fff;
-    padding: 16px 0;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    min-height: 56px;
+const TopbarContainer = styled.header`
+    height: 60px;
+    background: #082645;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 ${v.lgSpacing};
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`;
+
+const Title = styled.h1`
+    color: white;
+    font-size: 22px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const Topbar = () => {
     return (
-        <STopbar>
-            Sistema de gestión de prácticas en escuelas telesecundarias
-        </STopbar>
+        <TopbarContainer>
+            <Title>
+                Benemérita Escuela Normal Veracruzana Enrique C. Rébsamen
+            </Title>
+            <div>
+                Sistema de Gestión de Practicas Profesionales ()
+            </div>
+        </TopbarContainer>
     );
 };
 

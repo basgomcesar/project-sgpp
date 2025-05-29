@@ -56,9 +56,9 @@ const Sidebar = () => {
                     <AiOutlineLeft />
                 </SSidebarButton>
             </>
-            {/* <SLogo>
+            <SLogo>
                 <img src={logoSVG} alt="logo" />
-            </SLogo> */}
+            </SLogo>
             {/* <SSearch
                 onClick={searchClickHandler}
                 style={!sidebarOpen ? { width: `fit-content` } : {}}

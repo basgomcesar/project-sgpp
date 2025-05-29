@@ -1,3 +1,3 @@
-import logo from './react.svg';
+import logo from './logoNormal.png';
 
 export const logoSVG = logo;

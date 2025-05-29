@@ -14,3 +14,10 @@ export const SMain = styled.main`
         font-size: 14px;
     }
 `;
+
+export const SContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+`;
