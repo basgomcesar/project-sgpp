@@ -47,7 +47,7 @@ function ZoneSupervisors() {
                 <div className="alert alert-warning">No hay supervisores de zona registrados.</div>
             ) : (
                 <table className="table table-bordered table-striped">
-                    <thead className="table-dark">
+                    <thead className="table-light">
                         <tr>
                             <th>ID</th>
                             <th>Nombre del supervisor</th>

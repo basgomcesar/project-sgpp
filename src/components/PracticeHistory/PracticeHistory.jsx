@@ -55,8 +55,24 @@ const PracticeHistory = ({ practices: initialPractices }) => {
                     >
                       <td>{index + 1}</td>
                       <td>{practice.school_name || "N/A"}</td>
-                      <td>{practice.initial_date ? new Date(practice.initial_date).toLocaleDateString() : "N/A"}</td>
-                      <td>{practice.final_date ? new Date(practice.final_date).toLocaleDateString() : "N/A"}</td>
+                      <td>
+                        {practice.initial_date
+                          ? new Date(practice.initial_date).toLocaleDateString("es-ES", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })
+                          : "N/A"}
+                      </td>
+                      <td>
+                        {practice.final_date
+                          ? new Date(practice.final_date).toLocaleDateString("es-ES", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })
+                          : "N/A"}
+                      </td>
                       <td>{practice.practice_hours || 0}</td>
                       <td className="text-center">
                         <Trash2

@@ -8,9 +8,12 @@ const GroupsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
 
-  const handleSearch = () => {
-    setFilters({ group_name: searchTerm });
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setFilters({ course_name: value });
   };
+
   const renderSearchBar = () => (
     <div className="filter-bar">
       <h4>Filtrar grupos</h4>
@@ -19,11 +22,8 @@ const GroupsPage = () => {
         className="form-control mb-2"
         placeholder="Nombre del grupo"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleInputChange}
       />
-      <button className="btn btn-primary" onClick={handleSearch}>
-        Buscar
-      </button>
     </div>
   );
 

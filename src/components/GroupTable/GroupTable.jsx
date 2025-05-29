@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 export default function GroupTable({
-  onStudentDoubleClick,
-  filters,
+  filters = {},
   refreshKey,
 }) {
   const navigate = useNavigate();
@@ -33,11 +32,9 @@ export default function GroupTable({
   }, [refreshKey]);
 
   useEffect(() => {
-    if (groups.length === 0) return;
-
     let result = [...groups];
 
-    if (filters?.course_name) {
+    if (filters.course_name && filters.course_name.trim() !== "") {
       result = result.filter((group) =>
         group.course_name
           .toLowerCase()
@@ -47,7 +44,6 @@ export default function GroupTable({
 
     setFilteredGroups(result);
   }, [filters, groups]);
-
   const handleRowClick = (groupId) => {
     setSelectedRow(groupId);
   };

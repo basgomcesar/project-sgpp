@@ -4,6 +4,7 @@ import { invoke } from "@tauri-apps/api/core";
 import StudentInfo from "../StudentInfo/StudentInfo";
 import PracticeHistory from "../PracticeHistory/PracticeHistory";
 import EditControls from "../EditControls/EditControls";
+import { SDivider } from "../Sidebar/styles";
 
 const StudentDetailsPage = () => {
   const { id } = useParams();
@@ -110,7 +111,7 @@ const StudentDetailsPage = () => {
   return (
     <div className="container mt-12">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Detalles del Estudiante</h2>
+        <h3>Detalles del Estudiante</h3>
         <EditControls
           isEditing={isEditing}
           onEditClick={handleEditClick}
@@ -118,6 +119,7 @@ const StudentDetailsPage = () => {
           onCancelClick={handleCancelEdit}
         />
       </div>
+      
 
       <div className="row g-3" style={{ height: "calc(100vh - 150px)" }}>
         <div className="col-md-6 h-100">

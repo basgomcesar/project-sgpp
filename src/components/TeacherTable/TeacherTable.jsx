@@ -29,6 +29,7 @@ const TeacherTable = ({ onTeacherDoubleClick, filters, refreshKey }) => {
     if (teachers.length === 0) return;
 
     let result = [...teachers];
+    
 
     if (filters.materia) {
       result = result.filter((teacher) => teacher.materia === filters.materia);

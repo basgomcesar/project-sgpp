@@ -46,7 +46,7 @@ const FilterBar = ({ onFilter }) => {
       <div className="card-body">
         <form onSubmit={handleSubmit}>
           <div className="row align-items-end g-3">
-            {/* Curso */}
+            {/* Curso
             <div className="col-md-4">
               <label className="form-label">Curso</label>
               <select
@@ -66,10 +66,10 @@ const FilterBar = ({ onFilter }) => {
                   Proyecto de intervención docente
                 </option>
               </select>
-            </div>
+            </div> */}
 
             {/* Escuela */}
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <label className="form-label">Escuela</label>
               <select
                 name="escuela"
@@ -84,7 +84,7 @@ const FilterBar = ({ onFilter }) => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
 
             {/* Semestre */}
             <div className="col-md-2">
