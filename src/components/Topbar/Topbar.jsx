@@ -27,8 +27,8 @@ const Topbar = () => {
             <Title>
                 Benemérita Escuela Normal Veracruzana Enrique C. Rébsamen
             </Title>
-            <div>
-                Sistema de Gestión de Practicas Profesionales ()
+            <div style={{ color: "white", fontSize: "16px" }}>
+                Sistema de Gestión de Practicas Profesionales 
             </div>
         </TopbarContainer>
     );

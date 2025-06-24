@@ -5,6 +5,7 @@ import StudentInfo from "../StudentInfo/StudentInfo";
 import PracticeHistory from "../PracticeHistory/PracticeHistory";
 import EditControls from "../EditControls/EditControls";
 import { SDivider } from "../Sidebar/styles";
+import generateCertificate from "../../utils/generateCertificate";
 
 const StudentDetailsPage = () => {
   const { id } = useParams();
@@ -105,6 +106,15 @@ const StudentDetailsPage = () => {
     }
   };
 
+const handleDownloadCertificate = async () => {
+  try {
+    await generateCertificate(student, practices);
+  } catch (error) {
+    console.error("Error al generar la constancia:", error.message);
+    alert("Error al generar la constancia");
+  }
+};
+
   if (loading) return <p>Cargando detalles...</p>;
   if (!student) return <p>No se encontró al estudiante</p>;
 
@@ -112,14 +122,21 @@ const StudentDetailsPage = () => {
     <div className="container mt-12">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Detalles del Estudiante</h3>
-        <EditControls
-          isEditing={isEditing}
-          onEditClick={handleEditClick}
-          onSaveClick={handleSaveChanges}
-          onCancelClick={handleCancelEdit}
-        />
+        <div>
+          <button 
+            className="btn btn-success me-2"
+            onClick={handleDownloadCertificate}
+          >
+            Descargar constancia experiencia docente
+          </button>
+          <EditControls
+            isEditing={isEditing}
+            onEditClick={handleEditClick}
+            onSaveClick={handleSaveChanges}
+            onCancelClick={handleCancelEdit}
+          />
+        </div>
       </div>
-      
 
       <div className="row g-3" style={{ height: "calc(100vh - 150px)" }}>
         <div className="col-md-6 h-100">

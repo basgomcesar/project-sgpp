@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";//Esto lo que hace es importar la libreria de react y el hook useState
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
-//import { invoke } from "@tauri-apps/api/core";
 import Layout from "./components/Layout/Layout";
 
 import { GlobalStyle } from "./styles/globalStyles";
